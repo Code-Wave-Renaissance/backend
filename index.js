@@ -12,6 +12,6 @@ app.use(express.json());
 //routes
 app.use('/api', taskRoute);
 
-app.listen(config.port, () =>
+app.listen(`${process.env.VERCEL_URL || config.port}`, () =>
   console.log(`Server is live @ ${config.hostUrl}`),
 );
