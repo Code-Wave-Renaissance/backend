@@ -39,7 +39,10 @@ export const getTasks = async (req, res, next) => {
                     doc.data().pfpUrl,
                     doc.data().title,
                     doc.data().description,
-                    doc.data().price
+                    doc.data().price,
+                    doc.data().verifiedAddresses,
+                    doc.data().applicants,
+                    doc.data().status
                 );
                 taskArray.push(task);
             });
