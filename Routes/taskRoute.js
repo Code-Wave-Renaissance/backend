@@ -16,7 +16,7 @@ router.post('/new', createTask);
 router.get('/task/:id', getTask);
 router.put('/update/:id', updateTask);
 // router.patch('/update/:id', updateTask);
-router.put('/update/:id', addApplicants);
+router.put('/add-applicants/:id', addApplicants);
 router.delete('/delete/:id', deleteTask);
 
 export default router;
