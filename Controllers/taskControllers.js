@@ -42,7 +42,8 @@ export const getTasks = async (req, res, next) => {
                     doc.data().price,
                     doc.data().verifiedAddresses,
                     doc.data().applicants,
-                    doc.data().status
+                    doc.data().status,
+                    doc.data().dealWith
                 );
                 taskArray.push(task);
             });
@@ -110,6 +111,30 @@ export const addApplicants = async (req, res, next) => {
     }
 };
 
+export const makeDeal = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const dataToUpdate = req.body;
+
+        const taskRef = doc(db, "tasks", id);
+        const taskSnap = await getDoc(taskRef);
+
+        if (taskSnap.exists()) {
+            // Merge existing data with the updated data
+            const existingData = taskSnap.data();
+            const updatedData = { ...existingData, ...dataToUpdate };
+
+            // Update the task document with the updated data
+            await updateDoc(taskRef, updatedData);
+
+            res.status(200).send("Task partially updated successfully");
+        } else {
+            res.status(404).send("Task not found");
+        }
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
 
 export const deleteTask = async (req, res, next) => {
     try {
