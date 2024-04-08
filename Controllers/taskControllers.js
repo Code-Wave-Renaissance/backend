@@ -81,6 +81,41 @@ export const updateTask = async (req, res, next) => {
     }
 };
 
+export const addApplicants = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const newApplicant = req.body.applicant; // Assuming the request body contains the new applicant data
+
+        // Get the existing task document
+        const taskRef = doc(db, "tasks", id);
+        const taskSnap = await getDoc(taskRef);
+
+        if (taskSnap.exists()) {
+            // Get the existing applicants data
+            const existingData = taskSnap.data().applicants || {};
+
+            // Generate a new key for the new applicant
+            const newApplicantKey = Date.now().toString();
+
+            // Construct the updated applicants object with the new applicant
+            const updatedApplicants = {
+                ...existingData,
+                [newApplicantKey]: newApplicant
+            };
+
+            // Update the task document with the updated applicants object
+            await updateDoc(taskRef, { applicants: updatedApplicants });
+
+            res.status(200).send("New applicant added successfully");
+        } else {
+            res.status(404).send("Task not found");
+        }
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
+
+
 export const deleteTask = async (req, res, next) => {
     try {
         const id = req.params.id;
